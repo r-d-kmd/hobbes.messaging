@@ -16,6 +16,6 @@ steps:
 
 - script: dotnet fake build --target release 
   env:
-     BUILD_VERSION : $(Build.BuildNumber)
+    BUILD_VERSION : $(Build.BuildNumber)
     KEY: $(API_KEY)
   displayName: 'release'

@@ -2,3 +2,7 @@
 paket-files
 src/bin
 src/obj
+.fake
+.paket
+package
+*.nupkg

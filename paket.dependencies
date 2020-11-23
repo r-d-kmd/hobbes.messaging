@@ -1,0 +1,27 @@
+version 5.251.0
+source https://api.nuget.org/v3/index.json
+
+storage: none
+framework: auto-detect
+storage: none
+
+nuget Microsoft.AspNetCore.Authentication.JwtBearer = 3.1.10
+nuget Saturn = 0.13.1
+nuget Giraffe = 4.1.0
+nuget FSharp.Core
+nuget FSharp.Data
+nuget Newtonsoft.Json
+nuget Thoth.Json.Net
+
+group test
+    source https://api.nuget.org/v3/index.json
+    framework: auto-detect
+    storage: none
+    
+    nuget FsUnit
+    nuget FsUnit.xunit
+    nuget xunit
+    nuget Microsoft.NET.Test.SDK
+    nuget microsoft.testplatform.testhost
+    nuget xunit.runner.VisualStudio
+    nuget FSharp.Core ~> 5 

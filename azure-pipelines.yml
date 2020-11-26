@@ -16,9 +16,10 @@ steps:
 
 - script: |
     dotnet fake build --target package
+    VERSION="1.1.$BUILD_VERSION"
     if [[ -z "$VERSION" ]]
     then
-      echo "A packet version is required"
+      printf "\033[0;31mA packet version is required\033[0m\n"
       exit 1
     fi
 

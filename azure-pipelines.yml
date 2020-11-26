@@ -41,14 +41,14 @@ steps:
 
     if [ -z $API_KEY ]
     then
-        $API_KEY="az"
+        API_KEY="az"
     fi
-
+    PKG_FILE="$(ls *.nupkg)"
     if [ -z $FEED_URL ]
     then
-        dotnet nuget push --api-key $API_KEY "$(ls *.nupkg)"
+        dotnet nuget push --api-key $API_KEY "$PKG_FILE"
     else
-        dotnet nuget push --api-key $API_KEY --source "$FEED_URL" "$(ls *.nupkg)"
+        dotnet nuget push --api-key $API_KEY --source "$FEED_URL" "$PKG_FILE"
     fi
   env:
     BUILD_VERSION : $(Build.BuildNumber)

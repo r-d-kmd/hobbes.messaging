@@ -52,5 +52,6 @@ steps:
     fi
   env:
     BUILD_VERSION : $(Build.BuildNumber)
-    KEY: $(API_KEY)
+    FEED_PAT: $(FEED_PAT)
+    FEED_URL: $(FEED_URL)
   displayName: 'release'

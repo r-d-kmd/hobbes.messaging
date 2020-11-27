@@ -15,6 +15,7 @@ steps:
   displayName: 'Install prereq'
 
 - script: |
+    echo "$BUILD_VERSION $FEED_PAT"
     dotnet fake build --target package
     VERSION="1.1.$BUILD_VERSION"
     if [[ -z "$VERSION" ]]

@@ -9,7 +9,7 @@ nuget Fake.DotNet.NuGet //
 nuget Fake.IO.FileSystem //
 nuget Fake.Tools.Git ~> 5 //"
 #load "./.fake/build.fsx/intellisense.fsx"
-
+#load "build-extensions.fsx"
 
 #if !FAKE
 #r "netstandard"
@@ -19,6 +19,7 @@ nuget Fake.Tools.Git ~> 5 //"
 open Fake.Core
 open Fake.DotNet
 open Fake.IO
+
 
 [<RequireQualifiedAccess>]
 type Targets = 
@@ -147,7 +148,7 @@ create Targets.Test (fun _ ->
     match testsPath |> getProjectFile with
     Some tests -> 
         tests |> DotNet.test id
-    | None -> printfn "Skipping tests because no tests was found. Create a project in the folder 'tests/' wo have tests run"
+    | None -> printfn "Skipping tests because no tests was found. Create a project in the folder 'tests/' to have tests run"
 )
 
 Targets.Build
@@ -162,9 +163,10 @@ Targets.InstallDependencies
     ?=> Targets.Build
 
 Targets.Release
-    <=== Targets.InstallDependencies
+    <=== Targets.Push
     <=== Targets.Package
     <=== Targets.Test
+    <=== Targets.InstallDependencies
 
 Targets.Package
 |> runOrDefaultWithArguments 

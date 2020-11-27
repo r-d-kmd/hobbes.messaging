@@ -1,5 +1,5 @@
 version 5.251.0
-source https://api.nuget.org/v3/index.json
+source source https://kmddk.pkgs.visualstudio.com/45c29cd0-03bf-4f63-ac71-3c366095dda9/_packaging/KMD_Package_Feed/nuget/v2 username: "%FEED_PAT%" password: "%FEED_PAT%"
 
 storage: none
 framework: auto-detect

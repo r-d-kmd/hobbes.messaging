@@ -72,7 +72,7 @@ let run command workingDir args =
     |> Proc.run
     |> ignore
 
-let nugetFeedUrl = Environment.environVarOrDefault "FEED_URL" "https://api.nuget.org/v3/index.json"
+let nugetFeedUrl = Environment.environVarOrNone "FEED_URL"
 
 let buildConfiguration = 
         DotNet.BuildConfiguration.Release
@@ -140,7 +140,11 @@ create Targets.Push (fun _ ->
         None -> failwith "No nuget feed key found (set env var KEY)"
         | Some k -> k
 
-    sprintf "push --url %s --api-key %s %s" nugetFeedUrl key nupkgFilePath
+    (match nugetFeedUrl with 
+     Some nugetFeedUrl -> sprintf "push --url %s --api-key %s %s" nugetFeedUrl
+     | None -> sprintf "push --api-key %s %s")
+        key 
+        nupkgFilePath
     |> paket "./"
 )
 

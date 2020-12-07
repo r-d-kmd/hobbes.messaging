@@ -9,7 +9,6 @@ nuget Fake.DotNet.NuGet //
 nuget Fake.IO.FileSystem //
 nuget Fake.Tools.Git ~> 5 //"
 #load "./.fake/build.fsx/intellisense.fsx"
-#load "build-extensions.fsx"
 
 #if !FAKE
 #r "netstandard"

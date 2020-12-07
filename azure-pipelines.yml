@@ -16,7 +16,7 @@ steps:
 
 - script: |
     echo "$BUILD_VERSION $FEED_PAT"
-    dotnet fake build --target package
+    dotnet fake build --target packageandpush
     
   env:
     BUILD_VERSION : $(Build.BuildNumber)

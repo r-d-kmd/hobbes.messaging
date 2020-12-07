@@ -1,9 +1,9 @@
 version 5.251.0
-source source https://kmddk.pkgs.visualstudio.com/45c29cd0-03bf-4f63-ac71-3c366095dda9/_packaging/KMD_Package_Feed/nuget/v2 username: "%FEED_PAT%" password: "%FEED_PAT%"
+source https://api.nuget.org/v3/index.json
+#https://kmddk.pkgs.visualstudio.com/45c29cd0-03bf-4f63-ac71-3c366095dda9/_packaging/KMD_Package_Feed/nuget/v2 username: "%FEED_PAT%" password: "%FEED_PAT%"
 
 storage: none
 framework: auto-detect
-storage: none
 
 nuget Microsoft.AspNetCore.Authentication.JwtBearer = 3.1.10
 nuget Saturn = 0.13.1

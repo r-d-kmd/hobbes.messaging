@@ -139,13 +139,10 @@ create Targets.Push (fun _ ->
         match Environment.environVarOrNone "KEY" with
         None -> failwith "No nuget feed key found (set env var KEY)"
         | Some k -> k
-
-    (match nugetFeedUrl with 
-     Some nugetFeedUrl -> sprintf "push --url %s --api-key %s %s" nugetFeedUrl
-     | None -> sprintf "push --api-key %s %s")
-        key 
-        nupkgFilePath
-    |> paket "./"
+    let args = 
+        let workDir = System.IO.Path.GetAbsolutePath("./src")
+        sprintf "run -t kmdrd/paket-publisher -e VERSION=%s -v %s:/source" packageVersion workDir
+    run "docker" workDir args
 )
 
 create Targets.Test (fun _ ->

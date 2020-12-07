@@ -36,7 +36,7 @@ let targetName =
         Targets.Build -> "build"
         | Targets.InstallDependencies -> "installdependencies"
         | Targets.Package -> "package"
-        | Targets.PackageAndPush -> "packageandoush"
+        | Targets.PackageAndPush -> "packageandpush"
         | Targets.Test -> "test"
         | Targets.Release -> "release"
         | Targets.Generic s -> s

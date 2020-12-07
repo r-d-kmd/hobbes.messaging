@@ -8,6 +8,7 @@ nuget Fake.DotNet.Cli //
 nuget Fake.DotNet.NuGet //
 nuget Fake.IO.FileSystem //
 nuget Fake.Tools.Git ~> 5 //"
+
 #load "./.fake/build.fsx/intellisense.fsx"
 
 #if !FAKE
@@ -71,8 +72,6 @@ let run command workingDir args =
     |> Proc.run
     |> ignore
 
-let nugetFeedUrl = Environment.environVarOrNone "FEED_URL"
-
 let buildConfiguration = 
         DotNet.BuildConfiguration.Release
   
@@ -115,15 +114,16 @@ create Targets.Build (fun _ ->
 
     package buildConfiguration "./package" projectFile.Value
 )
-    
+
+let packageVersion = 
+    match Environment.environVarOrNone "BUILD_VERSION" with
+    None -> "0.1.local"
+    | Some bv ->
+        sprintf "1.1.%s" bv
+            
 create Targets.Package (fun _ ->
     let packages = Directory.EnumerateFiles(srcPath, "*.nupkg")
-    let version = "0.1.local"
-    let packageVersion = 
-        match Environment.environVarOrNone "BUILD_VERSION" with
-        None -> version
-        | Some bv ->
-            sprintf "1.1.%s" bv
+    
     File.deleteAll packages
     sprintf "pack --version %s ." packageVersion
     |> paket srcPath 
@@ -139,9 +139,9 @@ create Targets.Push (fun _ ->
         None -> failwith "No nuget feed key found (set env var KEY)"
         | Some k -> k
     let args = 
-        let workDir = System.IO.Path.GetAbsolutePath("./src")
+        let workDir = System.IO.Path.GetFullPath(".")
         sprintf "run -t kmdrd/paket-publisher -e VERSION=%s -v %s:/source" packageVersion workDir
-    run "docker" workDir args
+    run "docker" "." args
 )
 
 create Targets.Test (fun _ ->

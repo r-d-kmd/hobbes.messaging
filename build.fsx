@@ -25,7 +25,7 @@ open Fake.IO
 type Targets = 
    Build 
    | Package
-   | Push
+   | PackageAndPush
    | Test
    | Release
    | InstallDependencies
@@ -36,7 +36,7 @@ let targetName =
         Targets.Build -> "build"
         | Targets.InstallDependencies -> "installdependencies"
         | Targets.Package -> "package"
-        | Targets.Push -> "push"
+        | Targets.PackageAndPush -> "packageandoush"
         | Targets.Test -> "test"
         | Targets.Release -> "release"
         | Targets.Generic s -> s
@@ -129,15 +129,7 @@ create Targets.Package (fun _ ->
     |> paket srcPath 
 )
 
-create Targets.Push (fun _ ->
-    let nupkgFilePath = 
-        Directory.EnumerateFiles(srcPath, "*.nupkg")
-        |> Seq.exactlyOne
-
-    let key = 
-        match Environment.environVarOrNone "KEY" with
-        None -> failwith "No nuget feed key found (set env var KEY)"
-        | Some k -> k
+create Targets.PackageAndPush (fun _ ->
     let args = 
         let workDir = System.IO.Path.GetFullPath(".")
         sprintf "run -t kmdrd/paket-publisher -e VERSION=%s -v %s:/source" packageVersion workDir
@@ -155,16 +147,18 @@ Targets.Build
     ==> Targets.Package
 
 Targets.Build
+    ==> Targets.PackageAndPush
+
+Targets.Build
     ?=> Targets.Test
     ?=> Targets.Package
-    ?=> Targets.Push
+    ?=> Targets.PackageAndPush
 
 Targets.InstallDependencies
     ?=> Targets.Build
 
 Targets.Release
-    <=== Targets.Push
-    <=== Targets.Package
+    <=== Targets.PackageAndPush
     <=== Targets.Test
     <=== Targets.InstallDependencies
 

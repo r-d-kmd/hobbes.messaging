@@ -132,7 +132,7 @@ create Targets.Package (fun _ ->
 create Targets.PackageAndPush (fun _ ->
     let args = 
         let workDir = System.IO.Path.GetFullPath(".")
-        sprintf "run -t kmdrd/paket-publisher -e VERSION=%s -v %s:/source" packageVersion workDir
+        sprintf "run -e VERSION=%s -v %s:/source -t kmdrd/paket-publisher" packageVersion workDir
     run "docker" "." args
 )
 

@@ -15,10 +15,9 @@ steps:
   displayName: 'Install prereq'
 
 - script: |
-    echo "$BUILD_VERSION $FEED_PAT"
     dotnet fake build --target packageandpush
     
   env:
-    BUILD_VERSION : $(Build.BuildNumber)
+    VERSION : 1.1.$(Build.BuildNumber)
     FEED_PAT: $(FEED_PAT)
   displayName: 'release'

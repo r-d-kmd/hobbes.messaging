@@ -130,9 +130,13 @@ create Targets.Package (fun _ ->
 )
 
 create Targets.PackageAndPush (fun _ ->
+    let apiKey = 
+        match Environment.environVarOrNone "API_KEY" with
+        None  -> "az"
+        | Some key -> key
     let args = 
         let workDir = System.IO.Path.GetFullPath(".")
-        sprintf "run -e VERSION=%s -v %s:/source -t kmdrd/paket-publisher" packageVersion workDir
+        sprintf "run -e VERSION=%s -e API_KEY=%s -v %s:/source -t kmdrd/paket-publisher" packageVersion apiKey workDir
     run "docker" "." args
 )
 

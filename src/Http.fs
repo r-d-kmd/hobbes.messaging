@@ -19,6 +19,7 @@ module Http =
         Configuration of string option
         | Transformation of string option
         | DependingTransformations of string
+        | Configurations
         | Collectors
         | Sources of string
         | Source
@@ -36,6 +37,7 @@ module Http =
                      | Some key -> [key]
                | Source -> ["source"]
                | Collectors -> ["collectors"]
+               | Configurations -> ["allConfigurations"]
                | Sources collector ->
                    ["sources";collector]
                | DependingTransformations cacheKey ->

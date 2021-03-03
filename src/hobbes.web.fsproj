@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>Hobbes.Web</RootNamespace>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Environment.fs" />

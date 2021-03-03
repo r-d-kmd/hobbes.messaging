@@ -5,7 +5,7 @@ source https://api.nuget.org/v3/index.json
 storage: none
 framework: auto-detect
 
-nuget Microsoft.AspNetCore.Authentication.JwtBearer = 3.1.10
+nuget Microsoft.AspNetCore.Authentication.JwtBearer
 nuget Saturn = 0.13.1
 nuget Giraffe = 4.1.0
 nuget FSharp.Core

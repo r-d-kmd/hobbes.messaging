@@ -3,18 +3,11 @@
   <PropertyGroup>
     <RootNamespace>Hobbes.Web</RootNamespace>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp5.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputPath>$(Configuration)/bin</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Environment.fs" />
-    <Compile Include="Http.fs" />
-    <Compile Include="Database.fs" />
-    <Compile Include="Log.fs" />
-    <Compile Include="Cache.fs" />
-    <Compile Include="Reflection.fs" />
-    <Compile Include="Security.fs" />
-    <Compile Include="Routing.fs" />
-    <Compile Include="RawdataTypes.fs" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

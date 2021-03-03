@@ -10,11 +10,22 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '5.0.x'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'restore'    
+
 - script: |
     dotnet tool restore
   displayName: 'Install prereq'
 
 - script: |
+    dotnet paket update
     dotnet fake build --target packageandpush
     
   env:

@@ -20,6 +20,7 @@ steps:
   displayName: 'Install prereq'
 
 - script: |
+    dotnet paket update
     dotnet fake build --target packageandpush
     
   env:

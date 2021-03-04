@@ -17,4 +17,5 @@
     <Compile Include="RawdataTypes.fs" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.targets" />
+  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

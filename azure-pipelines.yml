@@ -49,7 +49,7 @@ steps:
     cd src
     printf "$Green packaging with build version: $VERSION $NoColor"
     dotnet paket update
-    dotnet pack -c Release
+    dotnet pack -c Release -o .
     RESULT=$?
     if [[ "$RESULT" > 0 ]]
     then

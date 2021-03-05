@@ -95,7 +95,7 @@ steps:
     fi
     
   env:
-    VERSION : $(BuildID)
+    VERSION: $(Rev:r)
     API_KEY: $(API_KEY)
     FEED_PAT: $(FEED_PAT)
   displayName: 'release'

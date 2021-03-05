@@ -59,8 +59,6 @@ steps:
   displayName: "Packing"
 
 - script: |
-    
-    $VERSION=$(Build.BuildNumber)
     if [[ -z "$VERSION" ]]
     then
       echo "A packet version is required. '$VERSION' is not a version"
@@ -97,7 +95,7 @@ steps:
     fi
     
   env:
-    BUILD_VERSION : $(Build.BuildNumber)
+    VERSION : $(BuildID)
     API_KEY: $(API_KEY)
     FEED_PAT: $(FEED_PAT)
   displayName: 'release'

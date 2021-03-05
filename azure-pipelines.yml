@@ -60,7 +60,7 @@ steps:
 
 - script: |
     
-    $VERSION=$BUILD_VERSION
+    $VERSION=$(Build.BuildNumber)
     if [[ -z "$VERSION" ]]
     then
       echo "A packet version is required. '$VERSION' is not a version"

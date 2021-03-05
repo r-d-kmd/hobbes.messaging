@@ -119,7 +119,7 @@ let packageVersion =
     match Environment.environVarOrNone "BUILD_VERSION" with
     None -> "0.1.local"
     | Some bv ->
-        sprintf "1.1.%s" bv
+        sprintf "1.2.%s" bv
             
 create Targets.Package (fun _ ->
     let packages = Directory.EnumerateFiles(srcPath, "*.nupkg")
@@ -136,7 +136,7 @@ create Targets.PackageAndPush (fun _ ->
         | Some key -> key
     let args = 
         let workDir = System.IO.Path.GetFullPath(".")
-        sprintf "run -e VERSION=%s -e API_KEY=%s -v %s:/source -t kmdrd/paket-publisher" packageVersion apiKey workDir
+        sprintf "run -e VERSION=%s -e API_KEY=%s -v %s:/source -t kmdrd/paket-publisher:5.0" packageVersion apiKey workDir
     run "docker" "." args
 )
 

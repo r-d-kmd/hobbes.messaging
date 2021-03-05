@@ -4,6 +4,7 @@
     <RootNamespace>Hobbes.Web</RootNamespace>
     <OutputType>Library</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <OutputPath>bin/$(Configuration)</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Environment.fs" />

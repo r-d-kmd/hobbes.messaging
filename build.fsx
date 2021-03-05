@@ -119,7 +119,7 @@ let packageVersion =
     match Environment.environVarOrNone "BUILD_VERSION" with
     None -> "0.1.local"
     | Some bv ->
-        sprintf "1.2.%s" bv
+        sprintf "1.2.%s" bv 
             
 create Targets.Package (fun _ ->
     let packages = Directory.EnumerateFiles(srcPath, "*.nupkg")

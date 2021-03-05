@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <VersionPrefix>1.2.2</VersionPrefix>
+    <VersionSuffix>$(BUILD_VERSION)</VersionSuffix>
     <RootNamespace>Hobbes.Web</RootNamespace>
     <OutputType>Library</OutputType>
     <TargetFramework>net5.0</TargetFramework>

@@ -6,3 +6,4 @@ src/obj
 .paket
 package
 *.nupkg
+.DS_Store

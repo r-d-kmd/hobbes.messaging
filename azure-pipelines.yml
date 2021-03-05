@@ -26,7 +26,7 @@ steps:
 
 - script: |
     dotnet paket update
-    dotnet fake build --target packageandpush
+    dotnet fake build --target release 
     
   env:
     BUILD_VERSION : $(Build.BuildNumber)

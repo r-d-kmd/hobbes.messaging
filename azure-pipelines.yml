@@ -59,9 +59,9 @@ steps:
   displayName: "Packing"
 
 - script: |
-    if [[ -z "$VERSION" ]]
+    if [[ -z "$BUILD_VERSION" ]]
     then
-      echo "A packet version is required. '$VERSION' is not a version"
+      echo "A packet version is required. '$BUILD_VERSION' is not a version"
       exit 3
     fi
 
@@ -87,15 +87,15 @@ steps:
 
     if [ -z "$FEED_URL" ]
     then
-        printf "$Green pushing $VERSION to default endpoint $NoColor"
+        printf "$Green pushing $BUILD_VERSION to default endpoint $NoColor"
         dotnet nuget push --api-key $API_KEY "$(ls *.nupkg)"
     else
-        printf "$Green pushing $VERSION to $FEED_URL $NoColor"
+        printf "$Green pushing $BUILD_VERSION to $FEED_URL $NoColor"
         dotnet nuget push --api-key $API_KEY --source "$FEED_URL" "$(ls *.nupkg)"
     fi
     
   env:
-    VERSION: $(Rev:r)
+    BUILD_VERSION: $(Rev:r)
     API_KEY: $(API_KEY)
     FEED_PAT: $(FEED_PAT)
   displayName: 'release'

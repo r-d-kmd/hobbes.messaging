@@ -44,19 +44,10 @@ steps:
   displayName: Display colors
 - script: |
     dotnet tool restore
-  displayName: 'Install prereq'
-- script: |
-    cd src
-    printf "$Green packaging with build version: $VERSION $NoColor"
     dotnet paket update
-    dotnet pack -c Release -o .
-    RESULT=$?
-    if [[ "$RESULT" > 0 ]]
-    then
-        printf "$RED Couldn't pack. Got $RESULT $NoColor"
-        exit $RESULT
-    fi
-  displayName: "Packing"
+  displayName: 'Install prereq'
+
+- 
 
 - script: |
     if [[ -z "$BUILD_VERSION" ]]
@@ -65,10 +56,10 @@ steps:
       exit 3
     fi
 
-    if [[ ! -z $FEED_PAT ]]
+    if [[ ! -z $(FEED_PAT) ]]
     then
-        FEED_USER=$FEED_PAT
-        FEED_PASSWORD=$FEED_PAT
+        FEED_USER=$(FEED_PAT)
+        FEED_PASSWORD=$(FEED_PAT)
     fi
 
     if [[ ! -z $FEED_USER ]]
@@ -97,5 +88,4 @@ steps:
   env:
     BUILD_VERSION: $(Rev:r)
     API_KEY: $(API_KEY)
-    FEED_PAT: $(FEED_PAT)
   displayName: 'release'

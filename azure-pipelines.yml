@@ -19,13 +19,7 @@ steps:
     command: 'custom'
     custom: 'tool'
     arguments: 'restore'    
-
 - script: |
-    dotnet tool restore
-  displayName: 'Install prereq'
-
-- script: |
-    dotnet paket update
     Black='\033[0;30m'
     DarkGray='\033[1;30m'
     Red='\033[0;31m'
@@ -43,11 +37,30 @@ steps:
     LightGray='\033[0;37m'
     White='\033[1;37m'
     NoColor='\033[0m\n'
-
     function log(){
         printf "${LightCyan}$1${NoColor}"
     }
+    
+  displayName: Display colors
+- script: |
+    dotnet tool restore
+  displayName: 'Install prereq'
+- script: |
+    cd src
+    printf "$Green packaging with build version: $VERSION $NoColor"
+    dotnet paket update
+    dotnet pack -c Release
+    RESULT=$?
+    if [[ "$RESULT" > 0 ]]
+    then
+        printf "$RED Couldn't pack. Got $RESULT $NoColor"
+        exit $RESULT
+    fi
+  displayName: "Packing"
 
+- script: |
+    
+    $VERSION=$BUILD_VERSION
     if [[ -z "$VERSION" ]]
     then
       echo "A packet version is required. '$VERSION' is not a version"
@@ -67,21 +80,7 @@ steps:
         echo "<?xml version=\"1.0\" encoding=\"utf-8\"?><configuration><packageSources><clear /><add key=\"KMD_Package_Feed\" value=\"${FEED_URL}\" /></packageSources></configuration>" >> nuget.config
     fi
 
-    log "Restore tools"
-    dotnet tool restore
-
     cd src
-    BUILD_VERSION=$VERSION
-    printf "$Green packaging with build version: $VERSION $NoColor"
-
-    dotnet pack -c Release
-    RESULT=$?
-
-    if [[ "$RESULT" > 0 ]]
-    then
-        printf "$RED Couldn't pack. Got $RESULT $NoColor"
-        exit $RESULT
-    fi
 
     if [ -z "$API_KEY" ]
     then

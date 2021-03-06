@@ -31,13 +31,16 @@ steps:
   displayName: 'Install prereq'
 
 - task: NuGetCommand@2
+  displayName: "Pack nuget"
   inputs:
     command: pack
-    versioningScheme: byPrereleaseNumber
     majorVersion: '$Major'
     minorVersion: '$Minor'
     patchVersion: '$Patch'
+- task: NuGetAuthenticate@0
+  displayName: 'NuGet Authenticate'
 - task: NuGetCommand@2
+  displayName: "Push nuget"
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'

@@ -16,25 +16,26 @@ variables:
   
 steps:
 - task: UseDotNet@2
+  displayName: "Use net5"
   inputs:
     packageType: 'sdk'
     version: '5.0.x'
 - task: DotNetCoreCLI@2
+  displayName: "Resoter tools"
   inputs:
     command: 'custom'
     custom: 'tool'
     arguments: 'restore'    
 
-- script: |
-    dotnet tool restore
-    dotnet paket update
-  displayName: 'Install prereq'
+- script: dotnet paket update
+  displayName: 'install packages'
 
 - task: DotNetCoreCLI@2
+  displayName: "build"
   inputs:
     command: 'build'
+    configuration: Release
     projects: 'src/*.fsproj'
-    arguments: '-c Release'
 - task: NuGetCommand@2
   displayName: "Pack nuget"
   inputs:

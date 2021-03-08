@@ -9,27 +9,50 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  Major: '1'
+  Minor: '2'
+  Patch: '$(Rev:r)'
+  
 steps:
 - task: UseDotNet@2
+  displayName: "Use net5"
   inputs:
     packageType: 'sdk'
     version: '5.0.x'
 - task: DotNetCoreCLI@2
+  displayName: "Resoter tools"
   inputs:
     command: 'custom'
     custom: 'tool'
     arguments: 'restore'    
 
-- script: |
-    dotnet tool restore
-  displayName: 'Install prereq'
+- script: dotnet paket update
+  displayName: 'install packages'
 
-- script: |
-    dotnet paket update
-    dotnet fake build --target packageandpush
+- task: DotNetCoreCLI@2
+  displayName: "build"
+  inputs:
+    command: 'build'
+    configuration: Release
+    projects: 'src/*.fsproj'
+- task: NuGetCommand@2
+  displayName: "Pack nuget"
+  inputs:
+    command: pack
+    configuration: Release
+    packagesToPack: 'src/*.fsproj'
+    majorVersion: '$Major'
+    minorVersion: '$Minor'
+    patchVersion: '$Patch'
     
-  env:
-    BUILD_VERSION : $(Build.BuildNumber)
-    API_KEY: $(API_KEY)
-    FEED_PAT: $(FEED_PAT)
-  displayName: 'release'
+- task: NuGetAuthenticate@0
+  displayName: 'NuGet Authenticate'
+- task: NuGetCommand@2
+  displayName: "Push nuget"
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '45c29cd0-03bf-4f63-ac71-3c366095dda9/2447d53d-0348-4176-b5f4-4c55ed2d94c3'
+    allowPackageConflicts: true

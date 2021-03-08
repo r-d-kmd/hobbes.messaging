@@ -10,9 +10,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  Major: '1'
-  Minor: '2'
-  Patch: '$(Rev:r)'
+  BUILD_VERSION: '$(Rev:r)'
   
 steps:
 - task: UseDotNet@2
@@ -31,20 +29,10 @@ steps:
   displayName: 'install packages'
 
 - task: DotNetCoreCLI@2
-  displayName: "build"
   inputs:
-    command: 'build'
-    projects: 'src/*.fsproj'
-    arguments: "-c Release"
-- task: NuGetCommand@2
-  displayName: "Pack nuget"
-  inputs:
-    command: pack
-    configuration: Release
-    packagesToPack: 'src/*.fsproj'
-    majorVersion: '$Major'
-    minorVersion: '$Minor'
-    patchVersion: '$Patch'
+    command: 'pack'
+    packagesToPack: '**/*.fsproj'
+    versioningScheme: 'off'
     
 - task: NuGetAuthenticate@0
   displayName: 'NuGet Authenticate'

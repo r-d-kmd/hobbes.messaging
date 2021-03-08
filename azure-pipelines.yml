@@ -34,8 +34,8 @@ steps:
   displayName: "build"
   inputs:
     command: 'build'
-    configuration: Release
     projects: 'src/*.fsproj'
+    arguments: "-c Release"
 - task: NuGetCommand@2
   displayName: "Pack nuget"
   inputs:

@@ -30,10 +30,16 @@ steps:
     dotnet paket update
   displayName: 'Install prereq'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'src/*.fsproj'
+    arguments: '-c Release'
 - task: NuGetCommand@2
   displayName: "Pack nuget"
   inputs:
     command: pack
+    configuration: Release
     packagesToPack: 'src/*.fsproj'
     majorVersion: '$Major'
     minorVersion: '$Minor'

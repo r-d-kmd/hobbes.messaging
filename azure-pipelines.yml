@@ -10,7 +10,9 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  BUILD_VERSION: '$(Release.ReleaseId)'
+  MAJOR: 2
+  MINOR: 0
+  BUILD_VERSION: $[counter(variables[‘minor’], seed)]
 
 steps:
 - task: UseDotNet@2

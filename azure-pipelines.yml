@@ -12,7 +12,7 @@ pool:
 variables:
   MAJOR: 2
   MINOR: 0
-  BUILD_VERSION: $[counter(variables[‘minor’], 0)]
+  BUILD_VERSION: $[counter(variables[‘MINOR’], 0)]
 
 steps:
 - task: UseDotNet@2

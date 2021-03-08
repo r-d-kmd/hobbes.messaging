@@ -10,7 +10,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  BUILD_VERSION: '$(Rev:r)'
+  BUILD_VERSION: '$(Build.BuildId)'
   
 steps:
 - task: UseDotNet@2

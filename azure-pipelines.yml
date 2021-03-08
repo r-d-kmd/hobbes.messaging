@@ -11,7 +11,7 @@ pool:
 
 variables:
   BUILD_VERSION: '$(Release.ReleaseId)'
-  
+
 steps:
 - task: UseDotNet@2
   displayName: "Use net5"

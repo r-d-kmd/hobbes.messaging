@@ -34,7 +34,7 @@ steps:
   displayName: "Pack nuget"
   inputs:
     command: pack
-    packagesToPack: '**/*.fsproj'
+    packagesToPack: 'src/*.fsproj'
     majorVersion: '$Major'
     minorVersion: '$Minor'
     patchVersion: '$Patch'

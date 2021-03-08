@@ -34,9 +34,11 @@ steps:
   displayName: "Pack nuget"
   inputs:
     command: pack
+    packagesToPack: '**/*.csproj'
     majorVersion: '$Major'
     minorVersion: '$Minor'
     patchVersion: '$Patch'
+    
 - task: NuGetAuthenticate@0
   displayName: 'NuGet Authenticate'
 - task: NuGetCommand@2

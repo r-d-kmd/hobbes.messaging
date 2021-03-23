@@ -94,22 +94,18 @@ module Http =
          | Db of DbService
          | Calculator of CalculatorService
          | Configurations of ConfigurationService
-         | Collector of string * CollectorService
          with 
              member x.ToParts() = 
                match x with
-               UniformData serv -> "uniformdata", serv.ToPath(),8085
-               | Calculator serv -> "calculator",serv.ToPath(),8085
-               | Configurations serv -> "configurations", serv.ToPath(),8085
-               | Db serv -> "db",serv.ToPath(),5984
-               | Collector (collectorName,service) ->  
-                   collectorName.ToLower().Replace(" ","") 
-                   |> sprintf "collectors-%s", service.ToPath(),8085
+               UniformData serv -> env "UNIFORMDATA_DNS" "uniformdata-svc", serv.ToPath(),env "UNIFORM_PORT" "8085" |> int
+               | Calculator serv -> env "CALCULATOR_DNS" "calculator-svc",serv.ToPath(),env "CALCULATOR_PORT" "8085" |> int
+               | Configurations serv -> env "CONFIGURATION_DNS" "configurations-svc", serv.ToPath(),env "CONFIGURATION_PORT" "8085" |> int
+               | Db serv -> env "DB_DNS" "db-svc",serv.ToPath(),env "DB_PORT" "5984" |> int
              member x.ServiceUrl 
                   with get() = 
                       let serviceName,path,port = x.ToParts()
                       let pathString = System.String.Join("/",path |> List.map System.Web.HttpUtility.UrlEncode) 
-                      sprintf "http://%s-svc:%d/%s"  serviceName port pathString
+                      sprintf "http://%s:%d/%s"  serviceName port pathString
 
 
     let readBody (resp : HttpResponse) =
@@ -166,7 +162,8 @@ module Http =
                          silentHttpErrors = true
             ) |> readResponse id
         with e ->
-           Error(500, sprintf "%s %s %s" url e.Message e.StackTrace)
+           eprintf "Error: %s \n Stack: %s" e.Message e.StackTrace
+           Error(0, url)
 
     let put = putOrPost "PUT"
     let post service (body : string) = 

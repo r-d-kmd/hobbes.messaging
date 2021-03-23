@@ -1,6 +1,7 @@
 namespace Hobbes.Web
 
 open FSharp.Data
+open Hobbes.Helpers.Environment
 
 module Http =
     type Response<'T> = 

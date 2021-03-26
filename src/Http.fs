@@ -96,18 +96,22 @@ module Http =
          | Calculator of CalculatorService
          | Configurations of ConfigurationService
          with 
-             member x.ToParts() = 
-               match x with
-               UniformData serv -> env "UNIFORMDATA_DNS" "uniformdata-svc", serv.ToPath(),env "UNIFORM_PORT" "8085" |> int
-               | Calculator serv -> env "CALCULATOR_DNS" "calculator-svc",serv.ToPath(),env "CALCULATOR_PORT" "8085" |> int
-               | Configurations serv -> env "CONFIGURATION_DNS" "configurations-svc", serv.ToPath(),env "CONFIGURATION_PORT" "8085" |> int
-               | Db serv -> env "DB_DNS" "db-svc",serv.ToPath(),env "DB_PORT" "5984" |> int
+             private member x.ToParts() = 
+                let getDnsAndPort (serviceName) (defaultPort : int) = 
+                   let uc = serviceName.ToUpper()
+                   env ( uc + "_DNS") (serviceName + "-svc"), env (uc + "_PORT") (defaultPort |> string) |> int
+                let (dns,port), parts = 
+                    match x with
+                    UniformData serv -> 
+                        getDnsAndPort "uniformdata" 8085, serv.ToPath()
+                    | Calculator serv -> getDnsAndPort "calculator" 8085,serv.ToPath()
+                    | Configurations serv -> getDnsAndPort "configurations" 8085,serv.ToPath()
+                    | Db serv -> getDnsAndPort "db" 5984,serv.ToPath()
              member x.ServiceUrl 
                   with get() = 
-                      let serviceName,path,port = x.ToParts()
+                      let (serviceName, port), path = x.ToParts()
                       let pathString = System.String.Join("/",path |> List.map System.Web.HttpUtility.UrlEncode) 
                       sprintf "http://%s:%d/%s"  serviceName port pathString
-
 
     let readBody (resp : HttpResponse) =
         match resp.Body with
@@ -120,7 +124,6 @@ module Http =
                         |> Array.last
                         |> System.Text.Encoding.GetEncoding 
                 enc.GetString b
-                
             | Text t -> t
             
     let readResponse parser (resp : HttpResponse)  = 

@@ -143,7 +143,8 @@ module Routing =
 
         member private __.SafeCall (method : Reflection.MethodInfo) (args : obj []) = 
             try
-                method.Invoke(null, args) :?> (int * string)
+                let status,res = method.Invoke(null, args) :?> (int * string)
+                Log.logf "%s returned %d %s" method.Name status res
             with e ->
                 let rec innerMost (e : Exception) = 
                     if e.InnerException 

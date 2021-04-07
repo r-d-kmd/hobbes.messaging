@@ -145,6 +145,7 @@ module Routing =
             try
                 let status,res = method.Invoke(null, args) :?> (int * string)
                 Log.logf "%s returned %d %s" method.Name status res
+                status,res
             with e ->
                 let rec innerMost (e : Exception) = 
                     if e.InnerException 

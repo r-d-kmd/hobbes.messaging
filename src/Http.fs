@@ -96,22 +96,23 @@ module Http =
          | Calculator of CalculatorService
          | Configurations of ConfigurationService
          with 
-             private member x.ToParts() = 
-                let getDnsAndPort (serviceName) (defaultPort : int) = 
-                   let uc = serviceName.ToUpper()
-                   env ( uc + "_DNS") (serviceName + "-svc"), env (uc + "_PORT") (defaultPort |> string) |> int
-                let (dns,port), parts = 
-                    match x with
-                    UniformData serv -> 
-                        getDnsAndPort "uniformdata" 8085, serv.ToPath()
-                    | Calculator serv -> getDnsAndPort "calculator" 8085,serv.ToPath()
-                    | Configurations serv -> getDnsAndPort "configurations" 8085,serv.ToPath()
-                    | Db serv -> getDnsAndPort "db" 5984,serv.ToPath()
-             member x.ServiceUrl 
-                  with get() = 
-                      let (serviceName, port), path = x.ToParts()
-                      let pathString = System.String.Join("/",path |> List.map System.Web.HttpUtility.UrlEncode) 
-                      sprintf "http://%s:%d/%s"  serviceName port pathString
+            member private x.ToParts() = 
+                        let getDnsAndPort (serviceName : string) (defaultPort : int) = 
+                           let uc = serviceName.ToUpper()
+                           env ( uc + "_DNS") (serviceName + "-svc"), 
+                           env (uc + "_PORT") (defaultPort |> string) |> int
+                        
+                        match x with
+                        UniformData serv -> 
+                            getDnsAndPort "uniformdata" 8085, serv.ToPath()
+                        | Calculator serv -> getDnsAndPort "calculator" 8085,serv.ToPath()
+                        | Configurations serv -> getDnsAndPort "configurations" 8085,serv.ToPath()
+                        | Db serv -> getDnsAndPort "db" 5984,serv.ToPath()
+            member x.ServiceUrl 
+                    with get() = 
+                        let (serviceName, port), path = x.ToParts()
+                        let pathString = System.String.Join("/",path |> List.map System.Web.HttpUtility.UrlEncode) 
+                        sprintf "http://%s:%d/%s"  serviceName port pathString
 
     let readBody (resp : HttpResponse) =
         match resp.Body with

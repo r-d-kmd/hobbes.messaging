@@ -171,6 +171,15 @@ module Routing =
             | HttpMethods.Delete ->
                 this.DeleteF(state, pathf,(f |> withArgs path))
             | _ -> failwithf "Don't know the verb: %A" verb
+
+        member private this.GenerateRouteWithArgAndBody<'a> state (f : string -> 'a -> int * string) path verb = 
+            let pathf = PrintfFormat<_,_,_,_,'a>(path)
+            match verb with 
+            | HttpMethods.Post ->
+                this.PostF(state, pathf,(f |> withBody path))
+            | HttpMethods.Put ->
+                this.PutF(state, pathf,(f |> withBody path))
+            | _ -> failwithf "Body not supported for verb: %A" verb
         
         member this.LocalFetch(state, path, method : Reflection.MethodInfo) = 
             let f = 
@@ -210,11 +219,21 @@ module Routing =
             | HttpMethods.Put -> 
                 this.Put(state, path,(f |> withBodyNoArgs path))
             | _ -> failwithf "Body is not allowed for verb : %A" verb
+        
+        member private this.LocalWithArgAndBody<'a>(state, path, verb, method) = 
+            let f body (arg1: 'a) = 
+                this.SafeCall method [|arg1;body|]
+            this.GenerateRouteWithArgAndBody state f path verb
 
         [<CustomOperation("withBody")>]
         member this.WithBody(state, action : Expr<string -> int * string>) : RouterState =
             let path,method,verb = this.FindMethodAndPath action
             this.LocalWithBody(state,path,verb,method)
+            
+        [<CustomOperation("withArgAndBody")>]
+        member this.WithArgAndBody(state, action : Expr<('a  * string) -> int * string>) : RouterState =
+            let path,method,verb = this.FindMethodAndPath action
+            this.LocalWithArgAndBody<'a>(state,path,verb,method)
 
         [<CustomOperation("fetch")>]
         member this.Fetch(state, action : Expr<unit -> int * string>) : RouterState =

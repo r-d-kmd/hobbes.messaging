@@ -12,34 +12,39 @@ module RawdataTypes =
         }
     
     type Config = JsonProvider<"""[{
-            "_id" : "name",
-            "source" : {
-                "provider" : "azuredevops",
-                "id" : "lkjlkj", 
-                "project" : "gandalf",
-                "dataset" : "commits",
-                "server" : "https://analytics.dev.azure.com/kmddk/flowerpot"
+            "_id": "hkjh",
+            "sourceHash": "lkjlkjlkjlkj",
+            "meta" : {
+               "project" : "lkjlkj"
             },
-            "transformations" : ["jlk","lkjlk"]
+            "source": {
+                "provider": "odata",
+                "url": "https://analytics.dev.azure.com/kmddk/flowerpot/_odata/v2.0/WorkItemRevisions?",
+                "expand": "Iteration",
+                "select": "WorkItemId,WorkItemType,Iteration,CycleTimeDays,ChangedDate",
+                "filter": "Iteration%2FStartDate%20gt%202019-01-01Z",
+                "user": "a6plj3mmef7ithp54265tqr2kxeu2huz4s2hemgtudkh2sd2vyhq",
+                "pwd": "a6plj3mmef7ithp54265tqr2kxeu2huz4s2hemgtudkh2sd2vyhq"
+            },
+            "transformation" : "kjlkjlkjlkjlkjlkj"
         }, {
             "_id" : "name",
-            "source" : {
-                "id" : "lkjlkj",
-                "provider": "merge",
-                "datasets" : ["cache key for a data set","lkjlkjlk"]
+            "sourceHash": "lkjlkjlkjlkj",
+            "meta" : {
+               "project" : "lkjlkj",
+               "source" : "git-azure-devops"
             },
-            "transformations" : ["jlk","lkjlk"]
-        }, {
-            "_id" : "name",
-            "source" : 
-                {
-                    "provider" : "join",
-                    "id" : "kjlkj",
-                    "left": "cache key for a data set",
-                    "right" : "cache key for a data set",
-                    "field" : "name of field to join on "
-                },
-            "transformations" : ["jlk","lkjlk"]
+            "source" : {
+                "provider": "rest",
+                "urls": [
+                    "https://dev.azure.com/kmddk/kmdlogic/_apis/git/repositories/01c03de4-5713-4cad-b3d6-ff14dc4c387e/commits?api-version=6.0&$top=10000",
+                    "https://dev.azure.com/kmddk/kmdlogic/_apis/git/repositories/8622dba3-3a68-4a16-964a-03c42fd6033a/commits?api-version=6.0&$top=10000"
+                ],
+                "user": "a6plj3mmef7ithp54265tqr2kxeu2huz4s2hemgtudkh2sd2vyhq", 
+                "pwd": "a6plj3mmef7ithp54265tqr2kxeu2huz4s2hemgtudkh2sd2vyhq",
+                "values": "value"
+            },
+            "transformation" : "jlk"
         }]""", SampleIsList = true>
         
     let keyFromSourceDoc (source : string) = 
@@ -54,7 +59,7 @@ module RawdataTypes =
         try 
                 let source = config.Source
                 let sourceId =  source |> keyFromSource
-                System.String.Join(":",sourceId::(config.Transformations |> List.ofSeq))
+                System.String.Join(":",[sourceId;config.Transformation |> Hobbes.Helpers.Environment.hash])
                 
         with e ->
            failwithf "Failed to get key from (%s). Message: %s. Trace: %s" (config.JsonValue.ToString()) e.Message e.StackTrace

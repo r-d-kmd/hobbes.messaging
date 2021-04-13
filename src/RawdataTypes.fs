@@ -40,8 +40,6 @@ module RawdataTypes =
                     "https://dev.azure.com/kmddk/kmdlogic/_apis/git/repositories/01c03de4-5713-4cad-b3d6-ff14dc4c387e/commits?api-version=6.0&$top=10000",
                     "https://dev.azure.com/kmddk/kmdlogic/_apis/git/repositories/8622dba3-3a68-4a16-964a-03c42fd6033a/commits?api-version=6.0&$top=10000"
                 ],
-                "user": "a6plj3mmef7ithp54265tqr2kxeu2huz4s2hemgtudkh2sd2vyhq", 
-                "pwd": "a6plj3mmef7ithp54265tqr2kxeu2huz4s2hemgtudkh2sd2vyhq",
                 "values": "value"
             },
             "transformation" : "jlk"

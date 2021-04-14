@@ -40,13 +40,41 @@ module RawdataTypes =
                     "https://dev.azure.com/kmddk/kmdlogic/_apis/git/repositories/01c03de4-5713-4cad-b3d6-ff14dc4c387e/commits?api-version=6.0&$top=10000",
                     "https://dev.azure.com/kmddk/kmdlogic/_apis/git/repositories/8622dba3-3a68-4a16-964a-03c42fd6033a/commits?api-version=6.0&$top=10000"
                 ],
-                "user": "a6plj3mmef7ithp54265tqr2kxeu2huz4s2hemgtudkh2sd2vyhq", 
-                "pwd": "a6plj3mmef7ithp54265tqr2kxeu2huz4s2hemgtudkh2sd2vyhq",
                 "values": "value"
             },
             "transformation" : "jlk"
         }]""", SampleIsList = true>
         
+    type ConfigList = JsonProvider<"""[{
+            "_id" : "name",
+            "source" : {
+                "provider" : "azuredevops",
+                "id" : "lkjlkj", 
+                "project" : "gandalf",
+                "dataset" : "commits",
+                "server" : "https://analytics.dev.azure.com/kmddk/flowerpot"
+            },
+            "transformations" : ["jlk","lkjlk"]
+        }, {
+            "_id" : "name",
+            "source" : {
+                "id" : "lkjlkj",
+                "provider": "merge",
+                "datasets" : ["cache key for a data set","lkjlkjlk"]
+            },
+            "transformations" : ["jlk","lkjlk"]
+        }, {
+            "_id" : "name",
+            "source" : 
+                {
+                    "provider" : "join",
+                    "id" : "kjlkj",
+                    "left": "cache key for a data set",
+                    "right" : "cache key for a data set",
+                    "field" : "name of field to join on "
+                },
+            "transformations" : ["jlk","lkjlk"]
+        }]""">    
     let keyFromSourceDoc (source : string) = 
         source
         |> Hobbes.Web.Cache.key

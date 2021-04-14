@@ -89,12 +89,21 @@ module Http =
               match x with
               Root -> []
               | Database s -> [s]
+
+    type CalvinService =
+        Playground
+        | Query
+        with member x.ToPath() =
+              match x with
+              Playground -> ["graphql"]
+              | Query -> ["graphql"]
            
     type Service = 
          UniformData of UniformDataService
          | Db of DbService
          | Calculator of CalculatorService
          | Configurations of ConfigurationService
+         | Calvin of CalvinService
          with 
             member private x.ToParts() = 
                         let getDnsAndPort (serviceName : string) (defaultPort : int) = 
@@ -108,6 +117,7 @@ module Http =
                         | Calculator serv -> getDnsAndPort "calculator" 8085,serv.ToPath()
                         | Configurations serv -> getDnsAndPort "configurations" 8085,serv.ToPath()
                         | Db serv -> getDnsAndPort "db" 5984,serv.ToPath()
+                        | Calvin serv -> getDnsAndPort "calvin" 8085, serv.ToPath()
             member x.ServiceUrl 
                     with get() = 
                         let (serviceName, port), path = x.ToParts()

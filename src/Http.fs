@@ -23,6 +23,7 @@ module Http =
         | Collectors
         | Sources of string
         | Source
+        | ConfigurationList
         with member x.ToPath() =
                match x with
                Configuration s -> 
@@ -42,6 +43,7 @@ module Http =
                    ["sources";collector]
                | DependingTransformations cacheKey ->
                    ["dependingtransformations"; cacheKey]
+               | ConfigurationList -> ["configurationlist"]
     type CalculatorService =
         Calculate of string
         with member x.ToPath() = 

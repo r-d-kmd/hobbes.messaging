@@ -1,6 +1,7 @@
 namespace Hobbes.Web
 
 open FSharp.Data
+open Hobbes.Helpers.Environment
 
 module Http =
     type Response<'T> = 
@@ -96,23 +97,24 @@ module Http =
          | Db of DbService
          | Calculator of CalculatorService
          | Configurations of ConfigurationService
-         | Collector of string * CollectorService
          with 
-             member x.ToParts() = 
-               match x with
-               UniformData serv -> "uniformdata", serv.ToPath(),8085
-               | Calculator serv -> "calculator",serv.ToPath(),8085
-               | Configurations serv -> "configurations", serv.ToPath(),8085
-               | Db serv -> "db",serv.ToPath(),5984
-               | Collector (collectorName,service) ->  
-                   collectorName.ToLower().Replace(" ","") 
-                   |> sprintf "collectors-%s", service.ToPath(),8085
-             member x.ServiceUrl 
-                  with get() = 
-                      let serviceName,path,port = x.ToParts()
-                      let pathString = System.String.Join("/",path |> List.map System.Web.HttpUtility.UrlEncode) 
-                      sprintf "http://%s-svc:%d/%s"  serviceName port pathString
-
+            member private x.ToParts() = 
+                        let getDnsAndPort (serviceName : string) (defaultPort : int) = 
+                           let uc = serviceName.ToUpper()
+                           env ( uc + "_DNS") (serviceName + "-svc"), 
+                           env (uc + "_PORT") (defaultPort |> string) |> int
+                        
+                        match x with
+                        UniformData serv -> 
+                            getDnsAndPort "uniformdata" 8085, serv.ToPath()
+                        | Calculator serv -> getDnsAndPort "calculator" 8085,serv.ToPath()
+                        | Configurations serv -> getDnsAndPort "configurations" 8085,serv.ToPath()
+                        | Db serv -> getDnsAndPort "db" 5984,serv.ToPath()
+            member x.ServiceUrl 
+                    with get() = 
+                        let (serviceName, port), path = x.ToParts()
+                        let pathString = System.String.Join("/",path |> List.map System.Web.HttpUtility.UrlEncode) 
+                        sprintf "http://%s:%d/%s"  serviceName port pathString
 
     let readBody (resp : HttpResponse) =
         match resp.Body with
@@ -125,7 +127,6 @@ module Http =
                         |> Array.last
                         |> System.Text.Encoding.GetEncoding 
                 enc.GetString b
-                
             | Text t -> t
             
     let readResponse parser (resp : HttpResponse)  = 
@@ -168,7 +169,8 @@ module Http =
                          silentHttpErrors = true
             ) |> readResponse id
         with e ->
-           Error(500, sprintf "%s %s %s" url e.Message e.StackTrace)
+           eprintf "Error: %s \n Stack: %s" e.Message e.StackTrace
+           Error(0, url)
 
     let put = putOrPost "PUT"
     let post service (body : string) = 

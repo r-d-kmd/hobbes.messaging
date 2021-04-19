@@ -121,16 +121,16 @@ module Http =
 
     let readBody (resp : HttpResponse) =
         match resp.Body with
-            | Binary b -> 
-                let enc = 
-                    match resp.Headers |> Map.tryFind "Content-Type" with
-                    None -> System.Text.Encoding.Default
-                    | Some s ->
-                        s.Split "=" 
-                        |> Array.last
-                        |> System.Text.Encoding.GetEncoding 
-                enc.GetString b
-            | Text t -> t
+        | Binary b -> 
+            let enc = 
+                match resp.Headers |> Map.tryFind "Content-Type" with
+                None -> System.Text.Encoding.Default
+                | Some s ->
+                    s.Split "=" 
+                    |> Array.last
+                    |> System.Text.Encoding.GetEncoding 
+            enc.GetString b
+        | Text t -> t
             
     let readResponse parser (resp : HttpResponse)  = 
         if resp.StatusCode <> 200 then

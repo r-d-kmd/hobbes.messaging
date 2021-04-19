@@ -47,7 +47,7 @@ module RawdataTypes =
             "transformation" : "jlk"
         }]"""
     type Config = JsonProvider<ConfigSample, SampleIsList = true>
-    type ConfigList = JsonProvider<ConfigSample, SampleIsList = true>
+    type ConfigList = JsonProvider<ConfigSample>
         
     let keyFromSourceDoc (source : string) = 
         source

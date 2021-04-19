@@ -10,8 +10,10 @@ module RawdataTypes =
             Statements : string list
             Description : string
         }
-    
-    type Config = JsonProvider<"""[{
+
+    [<Literal>]
+    let private ConfigSample = 
+        """[{
             "_id": "hkjh",
             "sourceHash": "lkjlkjlkjlkj",
             "meta" : {
@@ -43,38 +45,10 @@ module RawdataTypes =
                 "values": "value"
             },
             "transformation" : "jlk"
-        }]""", SampleIsList = true>
+        }]"""
+    type Config = JsonProvider<ConfigSample, SampleIsList = true>
+    type ConfigList = JsonProvider<ConfigSample, SampleIsList = true>
         
-    type ConfigList = JsonProvider<"""[{
-            "_id" : "name",
-            "source" : {
-                "provider" : "azuredevops",
-                "id" : "lkjlkj", 
-                "project" : "gandalf",
-                "dataset" : "commits",
-                "server" : "https://analytics.dev.azure.com/kmddk/flowerpot"
-            },
-            "transformations" : ["jlk","lkjlk"]
-        }, {
-            "_id" : "name",
-            "source" : {
-                "id" : "lkjlkj",
-                "provider": "merge",
-                "datasets" : ["cache key for a data set","lkjlkjlk"]
-            },
-            "transformations" : ["jlk","lkjlk"]
-        }, {
-            "_id" : "name",
-            "source" : 
-                {
-                    "provider" : "join",
-                    "id" : "kjlkj",
-                    "left": "cache key for a data set",
-                    "right" : "cache key for a data set",
-                    "field" : "name of field to join on "
-                },
-            "transformations" : ["jlk","lkjlk"]
-        }]""">    
     let keyFromSourceDoc (source : string) = 
         source
         |> Hobbes.Web.Cache.key

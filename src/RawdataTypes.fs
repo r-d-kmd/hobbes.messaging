@@ -16,11 +16,11 @@ module RawdataTypes =
         """[{
             "_id": "hkjh",
             "sourceHash": "lkjlkjlkjlkj",
-            "meta" : {
-               "project" : "lkjlkj"
-            },
             "source": {
                 "provider": "odata",
+                "meta" : {
+                   "project" : "lkjlkj"
+                },
                 "url": "https://analytics.dev.azure.com/kmddk/flowerpot/_odata/v2.0/WorkItemRevisions?",
                 "expand": "Iteration",
                 "select": "WorkItemId,WorkItemType,Iteration,CycleTimeDays,ChangedDate",
@@ -32,12 +32,12 @@ module RawdataTypes =
         }, {
             "_id" : "name",
             "sourceHash": "lkjlkjlkjlkj",
-            "meta" : {
-               "project" : "lkjlkj",
-               "source" : "git-azure-devops"
-            },
             "source" : {
                 "provider": "rest",
+                "meta" : {
+                   "project" : "lkjlkj",
+                   "source" : "git-azure-devops"
+                },
                 "urls": [
                     "https://dev.azure.com/kmddk/kmdlogic/_apis/git/repositories/01c03de4-5713-4cad-b3d6-ff14dc4c387e/commits?api-version=6.0&$top=10000",
                     "https://dev.azure.com/kmddk/kmdlogic/_apis/git/repositories/8622dba3-3a68-4a16-964a-03c42fd6033a/commits?api-version=6.0&$top=10000"

@@ -16,16 +16,30 @@ module Http =
                 match x with
                 Read -> ["read"]
                 | Sync -> ["sync"]
+    
     type ConfigurationService =
         Configuration of string option
+        | Transformation of string option
+        | DependingTransformations of string
+        | Source
+        | ConfigurationList 
         | Meta of property: string * value: string
         with member x.ToPath() =
                 match x with
                 Configuration s -> 
-                   "configuration" ::
-                     match s with
-                     None -> []
-                     | Some key -> [key]
+                    "configuration" ::
+                      match s with
+                      None -> []
+                      | Some key -> [key]
+                | Transformation s -> 
+                    "transformation" ::
+                      match s with
+                      None -> []
+                      | Some key -> [key]
+                | Source -> ["source"]
+                | DependingTransformations cacheKey ->
+                    ["dependingtransformations"; cacheKey]
+                | ConfigurationList -> ["configurations"]
                 | Meta(property,value) ->
                     [
                        "meta"
